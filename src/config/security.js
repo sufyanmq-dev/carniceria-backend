@@ -1,25 +1,20 @@
+// Middleware de seguridad global para Express
+
 import helmet from "helmet";
-import rateLimit from "express-rate-limit";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import { corsOptions } from "./cors.js";
+import { generalLimiter } from "../middleware/rateLimiter.js";
 
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutos
-  max: 100,
-});
-
+/**
+ * Aplica todos los middlewares de seguridad a la app
+ * @param {import("express").Application} app
+ */
 const configureSecurityMiddleware = (app) => {
-  app.use(helmet());
-  app.use(limiter);
-
-  app.use(
-    cors({
-      origin: true,
-      credentials: true,
-    }),
-  );
-
-  app.use(cookieParser());
+  app.use(helmet()); // cabeceras de seguridad (XSS, clickjacking, etc.)
+  app.use(generalLimiter); // rate limit global: 100 req / 15 min por IP
+  app.use(cors(corsOptions)); // CORS según entorno
+  app.use(cookieParser()); // parsea cookies (JWT httpOnly)
 };
 
 export default configureSecurityMiddleware;
