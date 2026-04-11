@@ -12,8 +12,8 @@ import { generalLimiter } from "../middleware/rateLimiter.js";
  */
 const configureSecurityMiddleware = (app) => {
   app.use(helmet()); // cabeceras de seguridad (XSS, clickjacking, etc.)
-  app.use(generalLimiter); // rate limit global: 100 req / 15 min por IP
   app.use(cors(corsOptions)); // CORS según entorno
+  app.use(generalLimiter); // rate limit global: 100 req / 15 min por IP
   app.use(cookieParser()); // parsea cookies (JWT httpOnly)
 };
 
