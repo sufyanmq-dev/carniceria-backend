@@ -13,6 +13,8 @@ import { errorHandler } from "./middleware/errorHandler.js";
 const API_PORT = process.env.PORT ?? 5001;
 const app = express();
 
+app.set("trust proxy", 1);
+
 // Seguridad: CORS, Helmet, rate limit, cookies
 configureSecurityMiddleware(app);
 
